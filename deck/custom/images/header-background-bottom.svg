@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="2762px" height="546px" viewBox="0 0 2762 546" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>background</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="2762" height="546"></rect>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#61A8FF" offset="0%"></stop>
+            <stop stop-color="#4B74E5" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="0%" x2="0%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0.174960371" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="0%" x2="0%" y2="100%" id="linearGradient-5">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0.140709918" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100%" y1="0%" x2="0%" y2="100%" id="linearGradient-6">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <circle id="path-7" cx="1666.5" cy="479.5" r="2.5"></circle>
+        <circle id="path-8" cx="1527.5" cy="490.5" r="2.5"></circle>
+        <circle id="path-9" cx="1251.5" cy="458.5" r="2.5"></circle>
+        <circle id="path-10" cx="1181.5" cy="517.5" r="2.5"></circle>
+        <circle id="path-11" cx="912.5" cy="342.5" r="2.5"></circle>
+        <circle id="path-12" cx="825.5" cy="426.5" r="2.5"></circle>
+        <circle id="path-13" cx="867.5" cy="106.5" r="2.5"></circle>
+        <circle id="path-14" cx="2175.5" cy="428.5" r="2.5"></circle>
+        <circle id="path-15" cx="2173.5" cy="104.5" r="2.5"></circle>
+        <circle id="path-16" cx="2043.5" cy="173.5" r="2.5"></circle>
+    </defs>
+    <g id="kategory-ui" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="site-content-copy-2">
+            <g id="section-hero">
+                <g id="background">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use fill="#104095" opacity="0" xlink:href="#path-1"></use>
+                    <polygon id="path" fill-opacity="0.65" fill="#4B74E5" mask="url(#mask-2)" points="662.513672 318.089844 1415.83008 562.011719 656.898438 559.841797"></polygon>
+                    <polygon id="path" fill-opacity="0.430395154" fill="#4B74E5" mask="url(#mask-2)" points="662.513672 318.089844 1415.83008 562.011719 328 577.75"></polygon>
+                    <polygon id="path" fill-opacity="0.618631114" fill="#4B74E5" mask="url(#mask-2)" points="1638 566.167969 2057.69922 372.257812 2255.63672 566.167969"></polygon>
+                    <path d="M2116.66504,566.167969 L2057.12884,372.521338 L2057.69922,372.257812 L2255.63672,566.167969 L2116.66504,566.167969 Z" id="path" fill="url(#linearGradient-3)" opacity="0.6" mask="url(#mask-2)"></path>
+                    <polygon id="path" fill="#4B74E5" opacity="0.563292572" mask="url(#mask-2)" points="1932.32031 585.316406 1545.03516 585.316406 1621.45703 492.652344"></polygon>
+                    <polyline id="path" stroke="url(#linearGradient-4)" opacity="0.6" stroke-dasharray="3,3,3,3" mask="url(#mask-2)" points="435.960938 551.898438 914.878906 343 1253.36719 458.964844 1591.94922 573.144531 1665.29297 478.355469 2013.20313 581.695312 2175.65234 427.695313 2410.07031 564.054688"></polyline>
+                    <polyline id="path" stroke="url(#linearGradient-5)" opacity="0.6" stroke-dasharray="3,3,3,3" mask="url(#mask-2)" points="1196.4375 562.277344 1527.76562 490.554688 1703 618.210937"></polyline>
+                    <polyline id="path" stroke="url(#linearGradient-6)" opacity="0.6" stroke-dasharray="3,3,3,3" mask="url(#mask-2)" points="566.679688 584.820312 825.152344 425.070312 1141.39062 572.070312"></polyline>
+                    <polyline id="path" stroke="url(#linearGradient-5)" opacity="0.6" stroke-dasharray="3,3,3,3" mask="url(#mask-2)" points="1091.89648 563.316406 1181.14844 517.34375 1238.47461 559.630859"></polyline>
+                    <path d="M2172.23438,105.453125 L2044.76562,172.855469" id="path" stroke="url(#linearGradient-4)" opacity="0.6" stroke-dasharray="3,3,3,3" mask="url(#mask-2)"></path>
+                    <g id="path" mask="url(#mask-2)">
+                        <use fill-opacity="0.7" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-7"></use>
+                        <circle stroke-opacity="0.1" stroke="#FFFFFF" stroke-width="5" cx="1666.5" cy="479.5" r="5"></circle>
+                    </g>
+                    <g id="path" mask="url(#mask-2)">
+                        <use fill-opacity="0.7" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-8"></use>
+                        <circle stroke-opacity="0.1" stroke="#FFFFFF" stroke-width="5" cx="1527.5" cy="490.5" r="5"></circle>
+                    </g>
+                    <g id="path" mask="url(#mask-2)">
+                        <use fill-opacity="0.7" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-9"></use>
+                        <circle stroke-opacity="0.1" stroke="#FFFFFF" stroke-width="5" cx="1251.5" cy="458.5" r="5"></circle>
+                    </g>
+                    <g id="path" mask="url(#mask-2)">
+                        <use fill-opacity="0.7" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-10"></use>
+                        <circle stroke-opacity="0.1" stroke="#FFFFFF" stroke-width="5" cx="1181.5" cy="517.5" r="5"></circle>
+                    </g>
+                    <g id="path" mask="url(#mask-2)">
+                        <use fill-opacity="0.7" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-11"></use>
+                        <circle stroke-opacity="0.1" stroke="#FFFFFF" stroke-width="5" cx="912.5" cy="342.5" r="5"></circle>
+                    </g>
+                    <g id="path" mask="url(#mask-2)">
+                        <use fill-opacity="0.7" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-12"></use>
+                        <circle stroke-opacity="0.1" stroke="#FFFFFF" stroke-width="5" cx="825.5" cy="426.5" r="5"></circle>
+                    </g>
+                    <g id="path" mask="url(#mask-2)">
+                        <use fill-opacity="0.7" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-13"></use>
+                        <circle stroke-opacity="0.1" stroke="#FFFFFF" stroke-width="5" cx="867.5" cy="106.5" r="5"></circle>
+                    </g>
+                    <g id="path" mask="url(#mask-2)">
+                        <use fill-opacity="0.7" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-14"></use>
+                        <circle stroke-opacity="0.1" stroke="#FFFFFF" stroke-width="5" cx="2175.5" cy="428.5" r="5"></circle>
+                    </g>
+                    <g id="path" mask="url(#mask-2)">
+                        <use fill-opacity="0.7" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-15"></use>
+                        <circle stroke-opacity="0.1" stroke="#FFFFFF" stroke-width="5" cx="2173.5" cy="104.5" r="5"></circle>
+                    </g>
+                    <g id="path" mask="url(#mask-2)">
+                        <use fill-opacity="0.7" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-16"></use>
+                        <circle stroke-opacity="0.1" stroke="#FFFFFF" stroke-width="5" cx="2043.5" cy="173.5" r="5"></circle>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="2765px" height="441px" viewBox="0 0 2765 441" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>site-content copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="100%" y1="0%" x2="0%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0.132925725" offset="100%"></stop>
+        </linearGradient>
+        <circle id="path-2" cx="1348.5" cy="155.5" r="2.5"></circle>
+        <circle id="path-3" cx="853.5" cy="150.5" r="2.5"></circle>
+    </defs>
+    <g id="kategory-ui" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="site-content-copy">
+            <g id="section-hero">
+                <g id="background">
+                    <polygon id="path" fill-opacity="0.261492301" fill="#4B74E5" points="1086.05859 110.351562 953 -76 1231.39844 -40.7773437"></polygon>
+                    <path d="M1042.51047,48.955233 L970,-52.5973229 L1096.0423,-58 L1170.21833,-48.6153331 L1042.51047,48.955233 Z" id="path" fill-opacity="0.2" fill="#4B74E5"></path>
+                    <polygon id="path" fill-opacity="0.325181159" fill="#4B74E5" points="1546.81641 -72 1363.85547 125.429687 1012 -46.0273437"></polygon>
+                    <polygon id="path" fill-opacity="0.65" fill="#4B74E5" points="2081.44531 -102 1363.87094 125.425631 1269 -102"></polygon>
+                    <path d="M1364.08489,125.416913 L1547.03398,-72 L1287,-59.3717911 L1364.08489,125.416913 Z" id="path" fill-opacity="0.228317482" fill="#3877EC"></path>
+                    <polygon id="path" fill-opacity="0.3" fill="#4B74E5" points="1522 -93.4492188 1859.38281 113.976562 1907.36328 -156"></polygon>
+                    <path d="M1886.80287,-40.3106737 L1703.12031,17.9050663 L1522,-93.4492188 L1574.67971,-102 L1897.76635,-102 L1886.80287,-40.3106737 Z" id="path" fill-opacity="0.697124094" fill="#4B74E5"></path>
+                    <polyline id="path" stroke="url(#linearGradient-1)" opacity="0.7" stroke-dasharray="3,3,3,3" points="549.273438 -70 853.080078 151.133789 1249.44141 -70 1349.12695 156.382813 1987.79297 -43.3984375"></polyline>
+                    <g id="path">
+                        <use fill-opacity="0.7" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-2"></use>
+                        <circle stroke-opacity="0.1" stroke="#FFFFFF" stroke-width="5" cx="1348.5" cy="155.5" r="5"></circle>
+                    </g>
+                    <g id="path">
+                        <use fill-opacity="0.7" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-3"></use>
+                        <circle stroke-opacity="0.1" stroke="#FFFFFF" stroke-width="5" cx="853.5" cy="150.5" r="5"></circle>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

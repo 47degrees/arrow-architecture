@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <rect id="helios-a" width="256" height="256"/>
+    <linearGradient id="helios-c" x1="100%" x2=".474%" y1=".928%" y2="100%">
+      <stop offset="0%" stop-color="#FFA000"/>
+      <stop offset="100%" stop-color="#FF6F00"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <mask id="helios-b" fill="#fff">
+      <use xlink:href="#helios-a"/>
+    </mask>
+    <use fill="#FF7A00" xlink:href="#helios-a"/>
+    <g stroke="url(#helios-c)" stroke-width="150" mask="url(#helios-b)">
+      <g transform="translate(-370 -38)">
+        <polygon points="301.5 0 603 224.214 487.837 587 115.163 587 0 224.214"/>
+        <polygon points="413.5 0 715 224.214 599.837 587 227.163 587 112 224.214"/>
+        <polygon points="525.5 0 827 224.214 711.837 587 339.163 587 224 224.214"/>
+        <polygon points="637.5 0 939 224.214 823.837 587 451.163 587 336 224.214"/>
+        <polygon points="749.5 0 1051 224.214 935.837 587 563.163 587 448 224.214"/>
+      </g>
+    </g>
+    <g stroke="#FFF" stroke-width="1.92" transform="translate(81 65)">
+      <polygon points="47.323 .498 35.464 9.099 59.18 9.099"/>
+      <polygon points="4.418 31.613 8.945 45.526 16.275 23.012"/>
+      <polygon points="73.84 81.953 78.367 68.039 59.181 81.953"/>
+      <polygon points="20.806 81.953 35.463 81.953 16.277 68.039"/>
+      <polygon points="90.228 31.613 78.369 23.012 85.699 45.526"/>
+      <polygon points="47.323 90.554 59.18 81.952 35.464 81.952"/>
+      <polygon points="85.698 45.526 78.368 68.04 90.227 59.439"/>
+      <polygon points="20.806 9.099 16.277 23.012 35.463 9.099"/>
+      <polygon points="4.418 59.439 16.275 68.04 8.945 45.525"/>
+      <polygon points="73.84 9.099 59.181 9.099 78.367 23.012"/>
+      <polygon points="85.913 17.856 62.167 .636 32.818 .636 9.072 17.856 0 45.716 9.072 73.579 32.818 90.796 62.167 90.796 85.913 73.579 94.985 45.716"/>
+      <path d="M35.4631812 31.6127636L35.4631812 59.4396727M59.1807919 31.6127636L59.1807919 59.4396727M35.4631812 45.5257091L59.181302 45.5257091"/>
+    </g>
+    <text fill="#FFF" font-family="Montserrat-Medium, Montserrat" font-size="20" font-weight="400">
+      <tspan x="90" y="189">{Helios}</tspan>
+    </text>
+  </g>
+</svg>

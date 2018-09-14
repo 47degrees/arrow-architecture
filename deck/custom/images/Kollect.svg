@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <rect id="kollect-a" width="256" height="256"/>
+    <linearGradient id="kollect-c" x1="13.278%" x2="68.265%" y1="91.26%" y2="17.644%">
+      <stop offset="0%" stop-color="#876CFF"/>
+      <stop offset="16.94%" stop-color="#8B69FF"/>
+      <stop offset="100%" stop-color="#9F5BFF"/>
+    </linearGradient>
+    <linearGradient id="kollect-d" x1="73.869%" x2="0%" y1="19.472%" y2="68.172%">
+      <stop offset="0%" stop-color="#4B1F7D"/>
+      <stop offset="100%" stop-color="#3F1F7D"/>
+    </linearGradient>
+    <linearGradient id="kollect-g" x1="0%" x2="84.506%" y1="26.809%" y2="85.865%">
+      <stop offset="0%" stop-color="#876CFF"/>
+      <stop offset="100%" stop-color="#9F5BFF"/>
+    </linearGradient>
+    <polygon id="kollect-f" points="59.408 51.028 70.728 36.756 119.712 57.048 111.409 60.754"/>
+    <filter id="kollect-e" width="106.6%" height="133.3%" x="-3.3%" y="-8.3%" filterUnits="objectBoundingBox">
+      <feOffset dy="4" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feColorMatrix in="shadowOffsetOuter1" values="0 0 0 0 0.105882353   0 0 0 0 0.0274509804   0 0 0 0 0.325490196  0 0 0 0.0671988225 0"/>
+    </filter>
+    <linearGradient id="kollect-h" x1="73.869%" x2="0%" y1="19.472%" y2="68.172%">
+      <stop offset="0%" stop-color="#512486"/>
+      <stop offset="100%" stop-color="#452486"/>
+    </linearGradient>
+    <linearGradient id="kollect-i" x1="73.869%" x2="0%" y1="19.472%" y2="68.172%">
+      <stop offset="0%" stop-color="#974BC4"/>
+      <stop offset="100%" stop-color="#694BC4"/>
+    </linearGradient>
+    <linearGradient id="kollect-j" x1="73.869%" x2="0%" y1="19.472%" y2="68.172%">
+      <stop offset="0%" stop-color="#7532B1"/>
+      <stop offset="100%" stop-color="#5B29A0"/>
+    </linearGradient>
+    <linearGradient id="kollect-k" x1="73.869%" x2="0%" y1="19.472%" y2="68.172%">
+      <stop offset="0%" stop-color="#642D95"/>
+      <stop offset="100%" stop-color="#582D95"/>
+    </linearGradient>
+    <linearGradient id="kollect-n" x1="0%" x2="84.506%" y1="26.809%" y2="85.865%">
+      <stop offset="0%" stop-color="#876CFF"/>
+      <stop offset="100%" stop-color="#7123E0"/>
+    </linearGradient>
+    <polygon id="kollect-m" points="70.728 36.756 88.778 56.52 88.778 44.233"/>
+    <filter id="kollect-l" width="122.2%" height="140.5%" x="-11.1%" y="-10.1%" filterUnits="objectBoundingBox">
+      <feOffset dy="4" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feColorMatrix in="shadowOffsetOuter1" values="0 0 0 0 0.105882353   0 0 0 0 0.0274509804   0 0 0 0 0.325490196  0 0 0 0.1 0"/>
+    </filter>
+    <linearGradient id="kollect-o" x1="100%" x2="10.593%" y1="33.322%" y2="71.217%">
+      <stop offset="0%" stop-color="#714BB2"/>
+      <stop offset="100%" stop-color="#5911B2"/>
+    </linearGradient>
+    <polygon id="kollect-q" points="40.955 56.124 31.719 68.544 39.547 73.45"/>
+    <filter id="kollect-p" width="143.3%" height="146.2%" x="-21.7%" y="-11.5%" filterUnits="objectBoundingBox">
+      <feOffset dy="4" in="SourceAlpha" result="shadowOffsetOuter1"/>
+      <feColorMatrix in="shadowOffsetOuter1" values="0 0 0 0 0.105882353   0 0 0 0 0.0274509804   0 0 0 0 0.325490196  0 0 0 0.1 0"/>
+    </filter>
+    <linearGradient id="kollect-r" x1="73.869%" x2="0%" y1="19.472%" y2="68.172%">
+      <stop offset="0%" stop-color="#9C53D0"/>
+      <stop offset="100%" stop-color="#6E53D0"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <mask id="kollect-b" fill="#fff">
+      <use xlink:href="#kollect-a"/>
+    </mask>
+    <use fill="#1B0753" xlink:href="#kollect-a"/>
+    <g mask="url(#kollect-b)">
+      <g transform="translate(-312 -4)">
+        <g transform="translate(22.822)">
+          <polygon fill="#301368" points="200.589 0 401.178 263 0 263"/>
+          <polygon fill="#3F1D7A" points="200.589 0 401.178 263 200.808 263"/>
+        </g>
+        <g transform="translate(219.807 175.133)">
+          <polygon fill="#4D2486" points="66.363 0 132.725 87.867 0 87.867"/>
+          <polygon fill="#6738A5" points="66.363 0 132.725 87.867 66.373 87.867"/>
+        </g>
+      </g>
+    </g>
+    <g transform="translate(68 66)">
+      <polygon fill="url(#kollect-c)" points="10.716 105.995 59.408 51.028 40.954 56.124 .391 110.66"/>
+      <polygon fill="url(#kollect-d)" points="59.408 51.028 22.495 92.697 88.76 56.508"/>
+      <use fill="#000" filter="url(#kollect-e)" xlink:href="#kollect-f"/>
+      <use fill="url(#kollect-g)" xlink:href="#kollect-f"/>
+      <polygon fill="url(#kollect-h)" points="70.728 36.756 73.824 32.564 88.778 22.836 88.778 44.233"/>
+      <polygon fill="url(#kollect-i)" points="104.809 12.155 91.94 20.668 91.94 4.768 104.809 2.648"/>
+      <polygon fill="url(#kollect-j)" points="92.165 .31 92.165 20.668 87.144 23.885 73.702 2.747"/>
+      <polygon fill="url(#kollect-k)" points="105.035 2.647 105.035 6.158 102.005 3.146"/>
+      <use fill="#000" filter="url(#kollect-l)" xlink:href="#kollect-m"/>
+      <use fill="url(#kollect-n)" xlink:href="#kollect-m"/>
+      <polygon fill="url(#kollect-o)" points="40.955 56.124 20.434 61.471 31.719 68.544"/>
+      <g>
+        <use fill="#000" filter="url(#kollect-p)" xlink:href="#kollect-q"/>
+        <use fill="url(#kollect-n)" xlink:href="#kollect-q"/>
+      </g>
+      <polygon fill="url(#kollect-r)" points="73.702 2.746 63.5 14.894 63.5 32.565 73.823 32.565 87.144 23.884"/>
+    </g>
+    <text fill="#FFF" font-family="ZillaSlab-Medium, Zilla Slab" font-size="24" font-weight="400" opacity=".9">
+      <tspan x="115" y="182">Kollect</tspan>
+    </text>
+  </g>
+</svg>

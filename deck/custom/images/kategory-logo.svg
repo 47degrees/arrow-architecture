@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="154px" height="168px" viewBox="0 0 154 168" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title> icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-1.6%" y="-1.5%" width="103.2%" height="106.1%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="5" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.05 0" type="matrix" in="shadowOffsetOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <linearGradient x1="50%" y1="22.815668%" x2="50%" y2="73.7282539%" id="linearGradient-2">
+            <stop stop-color="#F99406" offset="0%"></stop>
+            <stop stop-color="#DB7190" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#00B5E2" offset="0%"></stop>
+            <stop stop-color="#4D72E5" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-4">
+            <stop stop-color="#05CDFF" offset="0%"></stop>
+            <stop stop-color="#6A8EFF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-5">
+            <stop stop-color="#61A8FF" offset="0%"></stop>
+            <stop stop-color="#4B74E5" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="kategory-ui" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="-icon" filter="url(#filter-1)" transform="translate(0.000000, -1.000000)">
+            <polygon id="path" fill="url(#linearGradient-2)" points="0 1.5 51.1650485 30.945 0 60.39"></polygon>
+            <polygon id="path" fill="url(#linearGradient-2)" points="153.498757 1.4994 102.333709 30.9444 153.498757 60.3894"></polygon>
+            <polygon id="path" fill="url(#linearGradient-3)" points="76.7475728 16.5 0 60.6675 0 119.5575 76.7475728 163.725"></polygon>
+            <polygon id="path" fill="url(#linearGradient-4)" points="76.7475728 16.5 153.495146 60.6675 153.495146 119.5575 76.7475728 163.725"></polygon>
+            <polygon id="path" fill="url(#linearGradient-5)" points="25.5832767 45.65415 25.580267 45.65565 0.00376213592 1.49865 0.00376213592 60.37365 0.000752427185 60.37665 0.000752427185 119.26665 25.5877913 134.00115 63.9570631 111.86115"></polygon>
+            <polygon id="path" fill="url(#linearGradient-5)" points="153.498757 60.3861 153.498757 1.4991 127.916233 45.6666 129.001233 46.2921 127.916233 45.6666 89.5424466 111.8721 127.916233 134.0001 153.498757 119.2791"></polygon>
+            <polygon id="shadow" fill="#000000" opacity="0.38841712" points="89.5331173 111.86998 119.138407 139.054527 127.921898 134.00251"></polygon>
+            <polygon id="shadow" fill="#000000" opacity="0.38841712" transform="translate(44.776915, 125.462254) scale(-1, 1) translate(-44.776915, -125.462254) " points="25.5825243 111.86998 55.1878137 139.054527 63.971305 134.00251"></polygon>
+        </g>
+    </g>
+</svg>
