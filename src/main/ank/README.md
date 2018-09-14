@@ -149,6 +149,32 @@ gist.copy(
 
 ## Provide an immutable data model and means to update it
 
+In typed FP this kinds of updates is done with Optics such as `Lens`
+
+```kotlin:ank
+import arrow.optics.*
+
+val ownerLens: arrow.optics.Lens<Gist, GithubUser> = 
+  Lens(
+    get = { gist -> gist.owner },
+    set = { value -> { gist: Gist -> gist.copy(owner = value) }}
+  )
+  
+val loginLens: Lens<GithubUser, String> = 
+  Lens(
+    get = { user -> user.login },
+    set = { value -> { user -> user.copy(login = value) }}
+  )
+  
+val ownerLogin = ownerLens compose loginLens
+
+ownerLogin.modify(gist, String::toUpperCase)
+```
+
+---
+
+## Provide an immutable data model and means to update it
+
 Updating arbitrarily nested data with Λrrow is a piece of cake
 
 ```kotlin
