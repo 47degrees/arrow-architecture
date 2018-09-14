@@ -1,0 +1,121 @@
+/*
+ * Copyright (C) 2017 The Arrow Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+buildscript {
+    ext {
+        // Constants
+        gradleVersion = '4.4.1'
+        gradleVersionsPluginVersion = '0.17.0'
+        javaVersion = JavaVersion.VERSION_1_7
+        kotlinVersion = '1.2.41'
+        arrowVersion = "0.7.3"
+        fuelVersion = "1.15.0"
+        moshiVersion = "1.6.0"
+    }
+
+    repositories {
+        jcenter()
+        maven { url 'https://jitpack.io' }
+        maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
+        maven { url "https://dl.bintray.com/jetbrains/markdown/" }
+        maven { url "https://dl.bintray.com/arrow-kt/arrow-kt/" }
+    }
+
+    dependencies {
+        classpath "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
+        classpath 'io.arrow-kt:ank-gradle-plugin:0.7.1'
+        classpath 'org.ajoberstar:gradle-git-publish:0.3.2'
+    }
+}
+
+apply plugin: 'base'
+apply from: rootProject.file('gradle/generated-kotlin-sources.gradle')
+apply plugin: 'kotlin'
+compileKotlin.kotlinOptions.freeCompilerArgs += ["-Xskip-runtime-version-check"]
+apply plugin: 'kotlin-kapt'
+apply plugin: 'ank-gradle-plugin'
+apply plugin: 'org.ajoberstar.git-publish'
+
+repositories {
+    jcenter()
+    maven { url 'https://kotlin.bintray.com/kotlinx' }
+    maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
+    maven { url "http://dl.bintray.com/arrow-kt/arrow-kt" }
+    maven { url "https://dl.bintray.com/jetbrains/markdown/" }
+    maven { url 'https://jitpack.io' }
+}
+
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
+
+task wrapper(type: Wrapper) {
+    distributionUrl = "https://services.gradle.org/distributions/gradle-${project.ext.gradleVersion}-all.zip"
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+dependencies {
+    compile('io.arrow-kt:ank-core:0.7.1') {
+        exclude group: 'io.arrow-kt', module: 'arrow-core'
+        exclude group: 'io.arrow-kt', module: 'arrow-instances-core'
+        exclude group: 'io.arrow-kt', module: 'arrow-free'
+    }
+    compile "io.arrow-kt:arrow-data:$arrowVersion"
+    compile "io.arrow-kt:arrow-core:$arrowVersion"
+    compile "io.arrow-kt:arrow-instances-core:$arrowVersion"
+    compile "io.arrow-kt:arrow-instances-data:$arrowVersion"
+    compile "io.arrow-kt:arrow-effects-rx2:$arrowVersion"
+    compile "io.arrow-kt:arrow-effects-reactor:$arrowVersion"
+    compile "io.arrow-kt:arrow-effects-kotlinx-coroutines:$arrowVersion"
+    compile "io.arrow-kt:arrow-optics:$arrowVersion"
+    compile "io.arrow-kt:arrow-mtl:$arrowVersion"
+    compile "io.arrow-kt:arrow-free:$arrowVersion"
+    compile "io.arrow-kt:arrow-generic:$arrowVersion"
+    kapt "io.arrow-kt:arrow-annotations-processor:$arrowVersion"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    compile "com.github.kittinunf.fuel:fuel:$fuelVersion"
+    compile "com.squareup.moshi:moshi-kotlin:$moshiVersion"
+    compile "com.squareup.moshi:moshi-adapters:$moshiVersion"
+}
+
+task printcp {
+    doLast {
+        println sourceSets.main.runtimeClasspath.each { println it }
+    }
+}
+
+ank {
+    source = file("${projectDir}/src/main/ank")
+    target = file("${projectDir}/deck")
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
+
+compileKotlin.kotlinOptions.freeCompilerArgs += ["-Xskip-runtime-version-check"]
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+
+
