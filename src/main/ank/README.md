@@ -61,9 +61,9 @@ We merged with Funktionale to provide a single path to FP in Kotlin
 ## Requirements: Let's build a simple library
 
 - Fetch Gist information for a given github user name
-- Support async non-blocking capable data types such as `Observable`, `Flux`, `Deferred` and `IO`
 - Allow easy in memory model updates even when data is deeply nested
-  Ex: `gist.files[n].type` or `gist.user.login`
+  Ex: `gist.user.login`
+- Support async non-blocking capable data types such as `Observable`, `Flux`, `Deferred` and `IO`
 - Never throw exceptions. All effects should be controlled  
 - Provide a pure api in the library public interface
 
@@ -154,7 +154,7 @@ In typed FP this kinds of updates is done with Optics such as `Lens`
 ```kotlin:ank
 import arrow.optics.*
 
-val ownerLens: arrow.optics.Lens<Gist, GithubUser> = 
+val ownerLens: Lens<Gist, GithubUser> = 
   Lens(
     get = { gist -> gist.owner },
     set = { value -> { gist: Gist -> gist.copy(owner = value) }}
@@ -197,17 +197,86 @@ data class Gist(
 
 Updating arbitrarily nested data with Λrrow is a piece of cake
 
-```kotlin:ank
-import arrow.optics.dsl.*
-
-Gist.owner.login.modify(gist, String::toUpperCase)
+```diff
+- val ownerLens: Lens<Gist, GithubUser> = 
+-  Lens(
+-    get = { gist -> gist.owner },
+-    set = { value -> { gist: Gist -> gist.copy(owner = value) }}
+-  ) 
+- val loginLens: Lens<GithubUser, String> = 
+-  Lens(
+-    get = { user -> user.login },
+-    set = { value -> { user -> user.copy(login = value) }}
+-  )
+- val ownerLogin = ownerLens compose loginLens
+- ownerLogin.modify(gist, String::toUpperCase)
++ import arrow.optics.dsl.*
++ Gist.owner.login.modify(gist, String::toUpperCase)
 ```
 
 ---
 
-## A few syntax examples
+## Support Async/Non-Blocking Popular data types
+
+A initial naive blocking and exception throwing implementation
 
 ```kotlin:ank
+import arrow.data.*
+import com.squareup.moshi.*
+import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.result.Result
+
+fun publicGistsForUser(userName: String): ListK<Gist> {
+  val (_,_, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString()
+  return when (result) {
+    is Result.Failure -> throw result.getException()
+    is Result.Success -> fromJson(result.value)
+  }
+}
+
+publicGistsForUser("raulraja")
+```
+
+---
+
+## Support Async/Non-Blocking Popular data types
+
+Folks starting with FP in Kotlin lean toward using `Result` and `Either` types.
+This is exception free but it remains blocking
+
+```kotlin:ank
+import arrow.core.*
+
+fun publicGistsForUser(userName: String): Either<Throwable, ListK<Gist>> {
+  val (_,_, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString()
+  return when (result) {
+    is Result.Failure -> result.getException().left()
+    is Result.Success -> fromJson(result.value).right()
+  }
+}
+
+publicGistsForUser("-__unkown_user__-")
+```
+
+---
+
+## Support Async/Non-Blocking Popular data types
+
+Kotlin Coroutines is a popular async framework
+
+```kotlin:ank:fail
+import kotlinx.coroutines.experimental.*
+
+fun publicGistsForUser(userName: String): Deferred<Either<Throwable, ListK<Gist>>> =
+  async {
+    val (_, _, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString()
+    when (result) {
+      is Result.Failure -> result.getException().left()
+      is Result.Success -> fromJson(result.value).right()
+    }
+  }
+
+publicGistsForUser("raulraja")
 ```
 
 ---

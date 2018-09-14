@@ -61,9 +61,9 @@ We merged with Funktionale to provide a single path to FP in Kotlin
 ## Requirements: Let's build a simple library
 
 - Fetch Gist information for a given github user name
-- Support async non-blocking capable data types such as `Observable`, `Flux`, `Deferred` and `IO`
 - Allow easy in memory model updates even when data is deeply nested
-  Ex: `gist.files[n].type` or `gist.user.login`
+  Ex: `gist.user.login`
+- Support async non-blocking capable data types such as `Observable`, `Flux`, `Deferred` and `IO`
 - Never throw exceptions. All effects should be controlled  
 - Provide a pure api in the library public interface
 
@@ -156,7 +156,7 @@ In typed FP this kinds of updates is done with Optics such as `Lens`
 ```kotlin
 import arrow.optics.*
 
-val ownerLens: arrow.optics.Lens<Gist, GithubUser> = 
+val ownerLens: Lens<Gist, GithubUser> = 
   Lens(
     get = { gist -> gist.owner },
     set = { value -> { gist: Gist -> gist.copy(owner = value) }}
@@ -200,19 +200,89 @@ data class Gist(
 
 Updating arbitrarily nested data with Λrrow is a piece of cake
 
-```kotlin
-import arrow.optics.dsl.*
-
-Gist.owner.login.modify(gist, String::toUpperCase)
-// Gist(url=https://api.github.com/gists/4844dffca27c3689b47ea970ed5e276d, id=4844dffca27c3689b47ea970ed5e276d, files={typeclassless_tagless_extensions.kt=GistFile(fileName=typeclassless_tagless_extensions.kt, type=text/plain, language=Kotlin, size=1076)}, description=Tagless with Arrow & typeclassless using extension functions and instances, comments=0, owner=GithubUser(login=RAULRAJA, id=456796, url=https://api.github.com/users/raulraja))
+```diff
+- val ownerLens: Lens<Gist, GithubUser> = 
+-  Lens(
+-    get = { gist -> gist.owner },
+-    set = { value -> { gist: Gist -> gist.copy(owner = value) }}
+-  ) 
+- val loginLens: Lens<GithubUser, String> = 
+-  Lens(
+-    get = { user -> user.login },
+-    set = { value -> { user -> user.copy(login = value) }}
+-  )
+- val ownerLogin = ownerLens compose loginLens
+- ownerLogin.modify(gist, String::toUpperCase)
++ import arrow.optics.dsl.*
++ Gist.owner.login.modify(gist, String::toUpperCase)
 ```
 
 ---
 
-## A few syntax examples
+## Support Async/Non-Blocking Popular data types
+
+A initial naive blocking and exception throwing implementation
 
 ```kotlin
+import arrow.data.*
+import com.squareup.moshi.*
+import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.result.Result
 
+fun publicGistsForUser(userName: String): ListK<Gist> {
+  val (_,_, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString()
+  return when (result) {
+    is Result.Failure -> throw result.getException()
+    is Result.Success -> fromJson(result.value)
+  }
+}
+
+publicGistsForUser("raulraja")
+// ListK(list=[Gist(url=https://api.github.com/gists/4844dffca27c3689b47ea970ed5e276d, id=4844dffca27c3689b47ea970ed5e276d, files={typeclassless_tagless_extensions.kt=GistFile(fileName=null, type=text/plain, language=Kotlin, size=1076)}, description=Tagless with Arrow & typeclassless using extension functions and instances, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/e5f09c0cbd1392cf4eee5415150ebf76, id=e5f09c0cbd1392cf4eee5415150ebf76, files={dstagless.kt=GistFile(fileName=null, type=text/plain, language=Kotlin, size=3132)}, description=Tagless data source strategies with Arrow, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/4b592bbbdd0c048a45ae983c9f66d2eb, id=4b592bbbdd0c048a45ae983c9f66d2eb, files={validation.kt=GistFile(fileName=null, type=text/plain, language=Kotlin, size=2801)}, description=Validation: Accumulating errors and failing fast in Arrow with `ApplicativeError`, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/5bd6cc90195508b995d5b834fc315433, id=5bd6cc90195508b995d5b834fc315433, files={Tagless.kt=GistFile(fileName=null, type=text/plain, language=Kotlin, size=1076)}, description=Tagless in Kotlin with Arrow and manual DI, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/9267f5c98c92eafe5b2abbf1d22027d8, id=9267f5c98c92eafe5b2abbf1d22027d8, files={gistfile1.txt=GistFile(fileName=null, type=text/plain, language=Text, size=493)}, description=Scala Exercises - LambdaWorld Scala Center Hackathon, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/4c52171c35929a1aa0f3ac2762abce87, id=4c52171c35929a1aa0f3ac2762abce87, files={errors.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=3422)}, description=Sane Error Handling, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/6b825f53fc5c4370f488b200928cb461, id=6b825f53fc5c4370f488b200928cb461, files={increase_performance_attempt.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=277)}, description=Wrong order of effects, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/9cdebac37aaba038235bb5effe0cbd0e, id=9cdebac37aaba038235bb5effe0cbd0e, files={ecpitfalls.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=195)}, description=Wrong Execution Context passed to all ops in the same way via flatMap, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/13a8a8789f9b70a1535ea4d44dfb1777, id=13a8a8789f9b70a1535ea4d44dfb1777, files={FreeComposition.hs=GistFile(fileName=null, type=text/plain, language=Haskell, size=2902), FreeComposition.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=3104)}, description=Applications as Coproducts of Free ADTs. http://www.47deg.com/blog/fp-for-the-average-joe-part3-free-monads, comments=1, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/a38b99816020d2bce5fb, id=a38b99816020d2bce5fb, files={KleisliLocalShaped.sc=GistFile(fileName=null, type=application/vnd.ibm.secure-container, language=Scala, size=796)}, description=Shapeless autolifting Kleisli#local to avoid lambda boilerplate, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/c9e52f90a10688a4fcb3, id=c9e52f90a10688a4fcb3, files={SearchService.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=2028)}, description=An example of refactoring nested login in the Ensime Search Service with `XorT`, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/37a0b88b95113e71f491, id=37a0b88b95113e71f491, files={Either.java=GistFile(fileName=null, type=text/plain, language=Java, size=3578)}, description=A right biased disjoint union in Java with useful functional combinators., comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/6271058, id=6271058, files={Global.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=641), application.conf=GistFile(fileName=null, type=text/plain, language=null, size=175)}, description=Load application.conf overrides based on runtime environment and merge in overridden props. e.g. application.dev.conf, application.prod.conf, application.test.conf, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/4971984, id=4971984, files={ScalaVsJava.md=GistFile(fileName=null, type=text/plain, language=Markdown, size=1105)}, description=Some sample code regarding Scala Vs Java code verbosity, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/4543801, id=4543801, files={EmailService.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=6083)}, description=EmailService.scala improved with Exception Handling and Routes, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/4521203, id=4521203, files={EmailService.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=982)}, description=scala EmailService Actor, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/3931432, id=3931432, files={PersistenceServiceProxy.java=GistFile(fileName=null, type=text/plain, language=Java, size=1490)}, description=Sample Java Proxy, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/3930928, id=3930928, files={Application.java=GistFile(fileName=null, type=text/plain, language=Java, size=457)}, description=Sample Java Façade, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/3930813, id=3930813, files={Application.java=GistFile(fileName=null, type=text/plain, language=Java, size=939)}, description=Sample Java Abstract Factory, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/3928549, id=3928549, files={EarthService.java=GistFile(fileName=null, type=text/plain, language=Java, size=221)}, description=Sample Java Singleton, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/1217755, id=1217755, files={NetUtils.java=GistFile(fileName=null, type=text/plain, language=Java, size=1457)}, description=Check if a user has an internet connection for Android, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/1176022, id=1176022, files={gistfile1.m=GistFile(fileName=null, type=text/plain, language=Objective-C, size=2741)}, description=Async Operations with ObjectiveC Blocks, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/1159583, id=1159583, files={ContextUtils.java=GistFile(fileName=null, type=text/plain, language=Java, size=2150), EventListener.java=GistFile(fileName=null, type=text/plain, language=Java, size=978), EventPublisher.java=GistFile(fileName=null, type=text/plain, language=Java, size=965), EventService.java=GistFile(fileName=null, type=text/plain, language=Java, size=1235), EventServiceImpl.java=GistFile(fileName=null, type=text/plain, language=Java, size=5977), EventSubscriber.java=GistFile(fileName=null, type=text/plain, language=Java, size=1235), SampleAnnotations.java=GistFile(fileName=null, type=text/plain, language=Java, size=803), SampleAnnotationsImpl.java=GistFile(fileName=null, type=text/plain, language=Java, size=1834), SampleProgrammatically.java=GistFile(fileName=null, type=text/plain, language=Java, size=808), SampleProgrammaticallyImpl.java=GistFile(fileName=null, type=text/plain, language=Java, size=1507)}, description=Simple Event Broadcast with JAVA / Spring AOP / Annotations, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja))])
+```
+
+---
+
+## Support Async/Non-Blocking Popular data types
+
+Folks starting with FP in Kotlin lean toward using `Result` and `Either` types.
+This is exception free but it remains blocking
+
+```kotlin
+import arrow.core.*
+
+fun publicGistsForUser(userName: String): Either<Throwable, ListK<Gist>> {
+  val (_,_, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString()
+  return when (result) {
+    is Result.Failure -> result.getException().left()
+    is Result.Success -> fromJson(result.value).right()
+  }
+}
+
+publicGistsForUser("-__unkown_user__-")
+// Left(a=com.github.kittinunf.fuel.core.HttpException: HTTP Exception 404 Not Found)
+```
+
+---
+
+## Support Async/Non-Blocking Popular data types
+
+Kotlin Coroutines is a popular async framework
+
+```kotlin
+import kotlinx.coroutines.experimental.*
+
+fun publicGistsForUser(userName: String): Deferred<Either<Throwable, ListK<Gist>>> =
+  async {
+    val (_, _, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString()
+    when (result) {
+      is Result.Failure -> result.getException().left()
+      is Result.Success -> fromJson(result.value).right()
+    }
+  }
+
+publicGistsForUser("raulraja")
+// DeferredCoroutine{Active}@489b9d56
 ```
 
 ---
