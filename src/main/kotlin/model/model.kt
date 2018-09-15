@@ -6,33 +6,20 @@ import com.squareup.moshi.JsonClass
 @optics
 @JsonClass(generateAdapter = true)
 data class Gist(
-  val url: String,
-  val id: String,
   val files: Map<String, GistFile>,
   val description: String?,
   val comments: Long,
-  val owner: GithubUser
-) {
-  companion object
+  val owner: GithubUser) {
+
+  override fun toString(): String =
+    "Gist($description, ${owner.login}, file count: ${files.size})"
+
 }
 
 @optics
 @JsonClass(generateAdapter = true)
-data class GithubUser(
-  val login: String,
-  val id: Long,
-  val url: String
-) {
-  companion object
-}
+data class GithubUser(val login: String)
 
 @optics
 @JsonClass(generateAdapter = true)
-data class GistFile(
-  val fileName: String?,
-  val type: String,
-  val language: String?,
-  val size: Long
-) {
-  companion object
-}
+data class GistFile(val fileName: String?)

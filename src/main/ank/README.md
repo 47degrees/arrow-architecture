@@ -1,26 +1,41 @@
+autoscale: false
+slidenumbers: true
+footer: [(@raulraja](https://twitter.com/raulraja) [, @47deg)](https://twitter.com/47deg) [=> Sources,](https://github.com/47deg/types-vs-tests) [Slides](https://speakerdeck.com/raulraja/types-vs-tests)
 
+![inline](custom/images/arrow-brand-transparent.png)
 
-## Started as...
-
-Learning Exercise to learn FP over Slack
-
-<img src="custom/images/ojetehandler.png" alt="Ojete Handler Logo">
-
----
-
-## ...then KΛTEGORY was born
-
-Solution for Typed FP in Kotlin
-
-<img src="custom/images/kategory-logo.svg" alt="Kategory logo">
+# Building Apps and Libs with Λrrow
 
 ---
 
-## Λrrow = KΛTEGORY + Funktionale
+# Who am I? # 
 
-We merged with Funktionale to provide a single path to FP in Kotlin
+![](custom/images/cover-background.png)
 
-<img src="custom/images/arrow-brand-transparent.svg" width="256" alt="Λrrow logo">
+[@raulraja](https://twitter.com/raulraja)
+[@47deg](https://twitter.com/47deg)
+
+- Co-Founder and CTO at 47 Degrees
+- FP advocate
+- Electric Guitar @ <Ben Montoya & the Free Monads>
+
+---
+
+## Started as learning Exercise to learn FP over Slack
+
+![inline](custom/images/ojetehandler.png)
+
+---
+
+## ...then KΛTEGORY was born: Solution for Typed FP in Kotlin
+
+![inline](custom/images/kategory-logo.svg)
+
+---
+
+## KΛTEGORY + Funktionale = Λrrow
+
+![inline](custom/images/arrow-brand-transparent.png)
 
 ---
 
@@ -36,7 +51,7 @@ We merged with Funktionale to provide a single path to FP in Kotlin
 | Combining      | `Semigroup`, `SemigroupK`, `Monoid`, `MonoidK` |
 | Effects        | `MonadDefer`, `Async`, `Effect`           |
 | Recursion      | `Recursive`, `BiRecursive`,...                                |
-| MTL         | `FunctorFilter`, `MonadState`, `MonadReader`, `MonadWriter`, `MonadFilter`, ...                |
+| MTL            | `FunctorFilter`, `MonadState`, `MonadReader`, `MonadWriter`, `MonadFilter`, ...                |
 
 ---
 
@@ -58,82 +73,93 @@ We merged with Funktionale to provide a single path to FP in Kotlin
 
 ---
 
-## Requirements: Let's build a simple library
+## Let's build a simple library
 
-- Fetch Gist information for a given github user name
-- Allow easy in memory model updates even when data is deeply nested
-  Ex: `gist.user.login`
-- Support async non-blocking capable data types such as `Observable`, `Flux`, `Deferred` and `IO`
-- Never throw exceptions. All effects should be controlled  
-- Provide a pure api in the library public interface
+### Requirements
+1. __Fetch Gists__ information __given a github user__ 
+2. __Immutable__ model
+  - Allow easy in memory updates
+  - Support deeply nested relationship without boilerplate
+3. Support __async non-blocking__ data types:
+  - `Observable`, `Flux`, `Deferred` and `IO`
+4. __Pure__:
+  - Never throw exceptions
+  - Defer effects evaluation
 
 ---
 
-## Provide an immutable data model and means to update it
+## __Fetch Gists__ information __given a github user__ 
 
 ```kotlin
-data class Gist(
-  val url: String,
-  val id: String,
-  val files: Map<String, GistFile>,
-  val description: String?,
-  val comments: Long,
-  val owner: GithubUser) 
-
-data class GithubUser(
-  val login: String,
-  val id: Long,
-  val url: String) 
-
-data class GistFile(
-  val fileName: String?,
-  val type: String,
-  val language: String?,
-  val size: Long)
+fun publicGistsForUser(userName: String): List<Gist> = TODO()
 ```
 
 ---
 
-## Provide an immutable data model and means to update it
+## __Immutable__ model
+
+- Allow easy in memory updates
+- Support deeply nested relationship without boilerplate
+
+[.code-highlight: all]
+[.code-highlight: 4, 7, 9, 11]
+
+```kotlin
+data class Gist(
+  val files: Map<String, GistFile>,
+  val description: String?,
+  val comments: Long,
+  val owner: GithubUser) {
+  
+  override fun toString(): String =
+    "Gist($description, ${owner.login}, file count: ${files.size})"  
+    
+}
+
+data class GithubUser(val login: String) 
+
+data class GistFile(val fileName: String?)
+```
+
+---
+
+## __Immutable__ model
+
+- Allow easy in memory updates
+- Support deeply nested relationship without boilerplate
+
+[.code-highlight: all]
+[.code-highlight: 7-14, 17-21]
 
 ```kotlin:ank
 import arrow.intro.*
 
 val gist = 
   Gist(
-    url = "https://api.github.com/gists/4844dffca27c3689b47ea970ed5e276d",
-    id = "4844dffca27c3689b47ea970ed5e276d",
     files = mapOf(
       "typeclassless_tagless_extensions.kt" to GistFile(
-        fileName = "typeclassless_tagless_extensions.kt",
-        type = "text/plain",
-        language = "Kotlin",
-        size = 1076
+        fileName = "typeclassless_tagless_extensions.kt"
       )
     ),
     description = "Tagless with Arrow & typeclassless using extension functions and instances",
     comments = 0,
-    owner = GithubUser(
-      login = "raulraja",
-      id = 456796,
-      url = "https://api.github.com/users/raulraja"
-    )
+    owner = GithubUser(login = "raulraja")
   )
 ```
 
 ---
 
-## Provide an immutable data model and means to update it
+## __Immutable__ model
 
-Simple property updates with the compiler injected synthetic `copy` in all data classes
+The `data class` synthetic `copy` is fine for simple cases
 
 ```kotlin:ank
-gist.copy(comments = gist.comments + 1)
+gist.copy(description = gist.description?.toUpperCase())
 ```
 
 ---
 
-## Provide an immutable data model and means to update it
+## __Immutable__ model
 
 As we dive deeper to update nested data the levels of nested `copy` increases
 
@@ -147,9 +173,9 @@ gist.copy(
 
 ---
 
-## Provide an immutable data model and means to update it
+## __Immutable__ model
 
-In typed FP this kinds of updates is done with Optics such as `Lens`
+In Typed FP immutable updates is frequently done with composable `Optics` like `Lens`
 
 ```kotlin:ank
 import arrow.optics.*
@@ -173,7 +199,7 @@ ownerLogin.modify(gist, String::toUpperCase)
 
 ---
 
-## Provide an immutable data model and means to update it
+## __Immutable__ model
 
 Updating arbitrarily nested data with Λrrow is a piece of cake
 
@@ -216,20 +242,36 @@ Updating arbitrarily nested data with Λrrow is a piece of cake
 
 ---
 
+## Let's build a simple library
+
+### Requirements
+1. __Fetch Gists__ information __given a github user__ 
+2. ~~__Immutable__ model~~
+  - ~~Allow easy in memory updates~~
+  - ~~Support deeply nested relationship without boilerplate~~
+3. Support __async non-blocking__ data types:
+  - `Observable`, `Flux`, `Deferred` and `IO`
+4. __Pure__:
+  - Never throw exceptions
+  - Defer effects evaluation
+  
+--
+
 ## Support Async/Non-Blocking Popular data types
 
 A initial naive blocking and exception throwing implementation
 
 ```kotlin:ank
+import arrow.intro.Gist
 import arrow.data.*
 import com.squareup.moshi.*
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result
 
 fun publicGistsForUser(userName: String): ListK<Gist> {
-  val (_,_, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString()
+  val (_,_, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString() // blocking IO
   return when (result) {
-    is Result.Failure -> throw result.getException()
+    is Result.Failure -> throw result.getException() // blows the stack
     is Result.Success -> fromJson(result.value)
   }
 }
@@ -241,16 +283,15 @@ publicGistsForUser("raulraja")
 
 ## Support Async/Non-Blocking Popular data types
 
-Folks starting with FP in Kotlin lean toward using `Result` and `Either` types.
-This is exception free but it remains blocking
+When you are learning FP one leans toward using exception-free but blocking `Try` and `Either` like types.
 
 ```kotlin:ank
 import arrow.core.*
 
 fun publicGistsForUser(userName: String): Either<Throwable, ListK<Gist>> {
-  val (_,_, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString()
+  val (_,_, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString() // blocking IO
   return when (result) {
-    is Result.Failure -> result.getException().left()
+    is Result.Failure -> result.getException().left() //exceptions as a value
     is Result.Success -> fromJson(result.value).right()
   }
 }
@@ -262,14 +303,14 @@ publicGistsForUser("-__unkown_user__-")
 
 ## Support Async/Non-Blocking Popular data types
 
-Kotlin Coroutines is a popular async framework
+Many choose to go non-blocking with Kotlin Coroutines, a great and popular kotlin async framework
 
-```kotlin:ank:fail
+```kotlin:fail
 import kotlinx.coroutines.experimental.*
 
 fun publicGistsForUser(userName: String): Deferred<Either<Throwable, ListK<Gist>>> =
   async {
-    val (_, _, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString()
+    val (_, _, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString() 
     when (result) {
       is Result.Failure -> result.getException().left()
       is Result.Success -> fromJson(result.value).right()
@@ -281,19 +322,113 @@ publicGistsForUser("raulraja")
 
 ---
 
-## A few syntax examples
+## Support Async/Non-Blocking Popular data types
 
-```kotlin:ank
+But now we have to dive deep into the `Deferred` and `Either` effects to get to the value we care about
+
+```kotlin
+import arrow.effects.*
+import arrow.instances.*
+import arrow.typeclasses.*
+import arrow.effects.typeclasses.*
+
+DeferredK.monad().binding {
+  val raulResult: Either<Throwable, ListK<Gist>> = publicGistsForUser("raulraja").k().bind() 
+  val rafaResult: Either<Throwable, ListK<Gist>> = publicGistsForUser("rafaparedela").k().bind()
+  Either.monad<Throwable>().binding {
+    val raulGists: ListK<Gist> = raulResult.bind()
+    val rafaGists: ListK<Gist> = rafaResult.bind()
+    raulGists + rafaGists
+  }
+}
 ```
 
 ---
 
-## Applicative Builder
+## Support Async/Non-Blocking Popular data types
 
-```kotlin:ank
+Arrow Monad Transformers allow you to remain in the world of concrete data types such as `Either` and `Deferred`
+
+```kotlin
+import arrow.effects.*
+
+EitherT
+  .monad<ForDeferredK, Throwable>(DeferredK.monad())
+  .binding {
+     val raulGists = EitherT(publicGistsForUser("raulraja").k()).bind()
+     val rafaGists = EitherT(publicGistsForUser("rafaparedela").k()).bind()
+     raulGists + rafaGists
+   }
 ```
 
 ---
+
+## Support Async/Non-Blocking Popular data types
+
+But none of this stuff actually requires concrete data types if we use a Tagless Final Encoding.
+`Kind<F, A>` is the same as an `A` value inside `F` where `F` is a container.
+Ex: `List<A>`, `Deferred<A>`, `IO<A>`, `Observable<A>`
+
+```kotlin
+import arrow.Kind
+
+interface GistApiDataSource<F> {
+  fun publicGistsForUser(userName: String): Kind<F, ListK<Gist>>
+}
+```
+
+---
+
+## Support Async/Non-Blocking Popular data types
+
+How can we implement a computation in the context of `F` if we don't know what `F` is?
+
+```kotlin
+class DefaultGistApiDataSource<F>() : GistApiDataSource<F> {
+  override fun publicGistsForUser(userName: String): Kind<F, ListK<Gist>> = TODO()
+}
+```
+
+---
+
+## Support Async/Non-Blocking Popular data types
+
+Ad-Hoc Polymorphism and type classes!
+A type class is a generic interface that describes behaviors that concrete types can support
+
+```kotlin
+interface Functor<F> {
+  fun <A, B> Kind<F, A>.map(f: (A) -> B): Kind<F, B>
+}
+```
+
+---
+
+## Support Async/Non-Blocking Popular data types
+
+Monad models transformations which depend on values to be completed.
+
+```kotlin
+interface Monad<F> : Applicative<F> {
+  fun <A, B> Kind<F, A>.flatMap(f: (A) -> Kind<F, B>): Kind<F, B>
+}
+```
+
+```kotlin
+listOf(1).map { it + 1 }
+```
+```kotlin
+Option(1).map { it + 1 }
+```
+```kotlin
+Try { 1 }.map { it + 1 }
+```
+```kotlin
+Either.Right(1).map { it + 1 }
+```
+
+---
+
 
 ## Applicative Builder
 
@@ -313,7 +448,7 @@ publicGistsForUser("raulraja")
 
 Generalized to all monads. A suspended function provides a non blocking `F<A> -> A`
 
-```kotlin:ank
+```kotlin
 ```
 
 ---
@@ -322,7 +457,7 @@ Generalized to all monads. A suspended function provides a non blocking `F<A> ->
 
 Automatically captures exceptions for instances of `MonadError<F, Throwable>`
 
-```kotlin:ank
+```kotlin
 ```
 
 ---
@@ -331,7 +466,7 @@ Automatically captures exceptions for instances of `MonadError<F, Throwable>`
 
 Imperative filtering control for data types that can provide `empty` values.
 
-```kotlin:ank
+```kotlin
 ```
 
 ---
@@ -376,7 +511,7 @@ Arrow provides `MonadError<F, Throwable>` for `Deferred`
 
 Λrrow includes an `optics` library that make working with immutable data a breeze
 
-```kotlin:ank
+```kotlin
 ```
 
 ---
@@ -385,7 +520,7 @@ Arrow provides `MonadError<F, Throwable>` for `Deferred`
 
 while `kotlin` provides a synthetic `copy` dealing with nested data can be tedious
 
-```kotlin:ank
+```kotlin
 ```
 
 ---
@@ -403,7 +538,7 @@ You may define composable `Lenses` to work with immutable data transformations
 
 You may define composable `Lenses` to work with immutable data transformations
 
-```kotlin:ank
+```kotlin
 ```
 
 ---
@@ -421,7 +556,7 @@ Or just let Λrrow `@optics` do the dirty work
 
 Optics comes with a succinct and powerful DSL to manipulate deeply nested immutable properties
 
-```kotlin:ank
+```kotlin
 ```
 
 ---
@@ -439,7 +574,7 @@ You can also define `@optics` for your sealed hierarchies
 
 Where you operate over sealed hierarchies manually...
 
-```kotlin:ank
+```kotlin
 ```
 
 ---
@@ -448,7 +583,7 @@ Where you operate over sealed hierarchies manually...
 
 ...you cruise now through properties with the new optics DSL
 
-```kotlin:ank
+```kotlin
 ```
 
 ---
@@ -512,7 +647,7 @@ Fear not, `@higherkind`'s got your back!
 
 With emulated Higher Kinds and Type classes we can now write polymorphic code
 
-```kotlin:ank
+```kotlin
 import arrow.Kind
 import arrow.core.*
 import arrow.effects.*
@@ -525,7 +660,7 @@ import arrow.typeclasses.*
 
 With emulated Higher Kinds and Type classes we can now write polymorphic code
 
-```kotlin:ank
+```kotlin
 ```
 
 ---
@@ -561,7 +696,7 @@ With emulated Higher Kinds and Type classes we can now write polymorphic code
 
 Program that are abstract and work in many runtimes!
 
-```kotlin:ank
+```kotlin
 ```
 
 ---
@@ -570,7 +705,7 @@ Program that are abstract and work in many runtimes!
 
 Program that are abstract and work in many runtimes!
 
-```kotlin:ank
+```kotlin
 ```
 
 ---
@@ -579,7 +714,7 @@ Program that are abstract and work in many runtimes!
 
 Program that are abstract and work in many runtimes!
 
-```kotlin:ank
+```kotlin
 ```
 
 ---

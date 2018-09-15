@@ -1,26 +1,41 @@
+autoscale: false
+slidenumbers: true
+footer: [(@raulraja](https://twitter.com/raulraja) [, @47deg)](https://twitter.com/47deg) [=> Sources,](https://github.com/47deg/types-vs-tests) [Slides](https://speakerdeck.com/raulraja/types-vs-tests)
 
+![inline](custom/images/arrow-brand-transparent.png)
 
-## Started as...
-
-Learning Exercise to learn FP over Slack
-
-<img src="custom/images/ojetehandler.png" alt="Ojete Handler Logo">
-
----
-
-## ...then KΛTEGORY was born
-
-Solution for Typed FP in Kotlin
-
-<img src="custom/images/kategory-logo.svg" alt="Kategory logo">
+# Building Apps and Libs with Λrrow
 
 ---
 
-## Λrrow = KΛTEGORY + Funktionale
+# Who am I? # 
 
-We merged with Funktionale to provide a single path to FP in Kotlin
+![](custom/images/cover-background.png)
 
-<img src="custom/images/arrow-brand-transparent.svg" width="256" alt="Λrrow logo">
+[@raulraja](https://twitter.com/raulraja)
+[@47deg](https://twitter.com/47deg)
+
+- Co-Founder and CTO at 47 Degrees
+- FP advocate
+- Electric Guitar @ <Ben Montoya & the Free Monads>
+
+---
+
+## Started as learning Exercise to learn FP over Slack
+
+![inline](custom/images/ojetehandler.png)
+
+---
+
+## ...then KΛTEGORY was born: Solution for Typed FP in Kotlin
+
+![inline](custom/images/kategory-logo.svg)
+
+---
+
+## KΛTEGORY + Funktionale = Λrrow
+
+![inline](custom/images/arrow-brand-transparent.png)
 
 ---
 
@@ -36,7 +51,7 @@ We merged with Funktionale to provide a single path to FP in Kotlin
 | Combining      | `Semigroup`, `SemigroupK`, `Monoid`, `MonoidK` |
 | Effects        | `MonadDefer`, `Async`, `Effect`           |
 | Recursion      | `Recursive`, `BiRecursive`,...                                |
-| MTL         | `FunctorFilter`, `MonadState`, `MonadReader`, `MonadWriter`, `MonadFilter`, ...                |
+| MTL            | `FunctorFilter`, `MonadState`, `MonadReader`, `MonadWriter`, `MonadFilter`, ...                |
 
 ---
 
@@ -58,102 +73,111 @@ We merged with Funktionale to provide a single path to FP in Kotlin
 
 ---
 
-## Requirements: Let's build a simple library
+## Let's build a simple library
 
-- Fetch Gist information for a given github user name
-- Allow easy in memory model updates even when data is deeply nested
-  Ex: `gist.user.login`
-- Support async non-blocking capable data types such as `Observable`, `Flux`, `Deferred` and `IO`
-- Never throw exceptions. All effects should be controlled  
-- Provide a pure api in the library public interface
+### Requirements
+1. __Fetch Gists__ information __given a github user__ 
+2. __Immutable__ model
+  - Allow easy in memory updates
+  - Support deeply nested relationship without boilerplate
+3. Support __async non-blocking__ data types:
+  - `Observable`, `Flux`, `Deferred` and `IO`
+4. __Pure__:
+  - Never throw exceptions
+  - Defer effects evaluation
 
 ---
 
-## Provide an immutable data model and means to update it
+## __Fetch Gists__ information __given a github user__ 
 
 ```kotlin
-data class Gist(
-  val url: String,
-  val id: String,
-  val files: Map<String, GistFile>,
-  val description: String?,
-  val comments: Long,
-  val owner: GithubUser) 
-
-data class GithubUser(
-  val login: String,
-  val id: Long,
-  val url: String) 
-
-data class GistFile(
-  val fileName: String?,
-  val type: String,
-  val language: String?,
-  val size: Long)
+fun publicGistsForUser(userName: String): List<Gist> = TODO()
 ```
 
 ---
 
-## Provide an immutable data model and means to update it
+## __Immutable__ model
 
-```kotlin
+- Allow easy in memory updates
+- Support deeply nested relationship without boilerplate
+
+[.code-highlight: all]
+[.code-highlight: 4, 7, 9, 11]
+
+```kotlin:ank
+data class Gist(
+  val files: Map<String, GistFile>,
+  val description: String?,
+  val comments: Long,
+  val owner: GithubUser) {
+  
+  override fun toString(): String =
+    "Gist($description, ${owner.login}, file count: ${files.size})"  
+    
+}
+
+data class GithubUser(val login: String) 
+
+data class GistFile(val fileName: String?)
+```
+
+---
+
+## __Immutable__ model
+
+- Allow easy in memory updates
+- Support deeply nested relationship without boilerplate
+
+[.code-highlight: all]
+[.code-highlight: 7-14, 17-21]
+
+```kotlin:ank
 import arrow.intro.*
 
 val gist = 
   Gist(
-    url = "https://api.github.com/gists/4844dffca27c3689b47ea970ed5e276d",
-    id = "4844dffca27c3689b47ea970ed5e276d",
     files = mapOf(
       "typeclassless_tagless_extensions.kt" to GistFile(
-        fileName = "typeclassless_tagless_extensions.kt",
-        type = "text/plain",
-        language = "Kotlin",
-        size = 1076
+        fileName = "typeclassless_tagless_extensions.kt"
       )
     ),
     description = "Tagless with Arrow & typeclassless using extension functions and instances",
     comments = 0,
-    owner = GithubUser(
-      login = "raulraja",
-      id = 456796,
-      url = "https://api.github.com/users/raulraja"
-    )
+    owner = GithubUser(login = "raulraja")
   )
 ```
 
 ---
 
-## Provide an immutable data model and means to update it
+## __Immutable__ model
 
-Simple property updates with the compiler injected synthetic `copy` in all data classes
+The `data class` synthetic `copy` is fine for simple cases
 
-```kotlin
-gist.copy(comments = gist.comments + 1)
-// Gist(url=https://api.github.com/gists/4844dffca27c3689b47ea970ed5e276d, id=4844dffca27c3689b47ea970ed5e276d, files={typeclassless_tagless_extensions.kt=GistFile(fileName=typeclassless_tagless_extensions.kt, type=text/plain, language=Kotlin, size=1076)}, description=Tagless with Arrow & typeclassless using extension functions and instances, comments=1, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja))
+```kotlin:ank
+gist.copy(description = gist.description?.toUpperCase())
 ```
 
 ---
 
-## Provide an immutable data model and means to update it
+## __Immutable__ model
 
 As we dive deeper to update nested data the levels of nested `copy` increases
 
-```kotlin
+```kotlin:ank
 gist.copy(
   owner = gist.owner.copy(
     login = gist.owner.login.toUpperCase()
   )
 )
-// Gist(url=https://api.github.com/gists/4844dffca27c3689b47ea970ed5e276d, id=4844dffca27c3689b47ea970ed5e276d, files={typeclassless_tagless_extensions.kt=GistFile(fileName=typeclassless_tagless_extensions.kt, type=text/plain, language=Kotlin, size=1076)}, description=Tagless with Arrow & typeclassless using extension functions and instances, comments=0, owner=GithubUser(login=RAULRAJA, id=456796, url=https://api.github.com/users/raulraja))
 ```
 
 ---
 
-## Provide an immutable data model and means to update it
+## __Immutable__ model
 
-In typed FP this kinds of updates is done with Optics such as `Lens`
+In Typed FP immutable updates is frequently done with composable `Optics` like `Lens`
 
-```kotlin
+```kotlin:ank
 import arrow.optics.*
 
 val ownerLens: Lens<Gist, GithubUser> = 
@@ -171,12 +195,11 @@ val loginLens: Lens<GithubUser, String> =
 val ownerLogin = ownerLens compose loginLens
 
 ownerLogin.modify(gist, String::toUpperCase)
-// Gist(url=https://api.github.com/gists/4844dffca27c3689b47ea970ed5e276d, id=4844dffca27c3689b47ea970ed5e276d, files={typeclassless_tagless_extensions.kt=GistFile(fileName=typeclassless_tagless_extensions.kt, type=text/plain, language=Kotlin, size=1076)}, description=Tagless with Arrow & typeclassless using extension functions and instances, comments=0, owner=GithubUser(login=RAULRAJA, id=456796, url=https://api.github.com/users/raulraja))
 ```
 
 ---
 
-## Provide an immutable data model and means to update it
+## __Immutable__ model
 
 Updating arbitrarily nested data with Λrrow is a piece of cake
 
@@ -219,62 +242,75 @@ Updating arbitrarily nested data with Λrrow is a piece of cake
 
 ---
 
+## Let's build a simple library
+
+### Requirements
+1. __Fetch Gists__ information __given a github user__ 
+2. ~~__Immutable__ model~~
+  - ~~Allow easy in memory updates~~
+  - ~~Support deeply nested relationship without boilerplate~~
+3. Support __async non-blocking__ data types:
+  - `Observable`, `Flux`, `Deferred` and `IO`
+4. __Pure__:
+  - Never throw exceptions
+  - Defer effects evaluation
+  
+--
+
 ## Support Async/Non-Blocking Popular data types
 
 A initial naive blocking and exception throwing implementation
 
-```kotlin
+```kotlin:ank
+import arrow.intro.Gist
 import arrow.data.*
 import com.squareup.moshi.*
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result
 
 fun publicGistsForUser(userName: String): ListK<Gist> {
-  val (_,_, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString()
+  val (_,_, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString() // blocking IO
   return when (result) {
-    is Result.Failure -> throw result.getException()
+    is Result.Failure -> throw result.getException() // blows the stack
     is Result.Success -> fromJson(result.value)
   }
 }
 
 publicGistsForUser("raulraja")
-// ListK(list=[Gist(url=https://api.github.com/gists/4844dffca27c3689b47ea970ed5e276d, id=4844dffca27c3689b47ea970ed5e276d, files={typeclassless_tagless_extensions.kt=GistFile(fileName=null, type=text/plain, language=Kotlin, size=1076)}, description=Tagless with Arrow & typeclassless using extension functions and instances, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/e5f09c0cbd1392cf4eee5415150ebf76, id=e5f09c0cbd1392cf4eee5415150ebf76, files={dstagless.kt=GistFile(fileName=null, type=text/plain, language=Kotlin, size=3132)}, description=Tagless data source strategies with Arrow, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/4b592bbbdd0c048a45ae983c9f66d2eb, id=4b592bbbdd0c048a45ae983c9f66d2eb, files={validation.kt=GistFile(fileName=null, type=text/plain, language=Kotlin, size=2801)}, description=Validation: Accumulating errors and failing fast in Arrow with `ApplicativeError`, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/5bd6cc90195508b995d5b834fc315433, id=5bd6cc90195508b995d5b834fc315433, files={Tagless.kt=GistFile(fileName=null, type=text/plain, language=Kotlin, size=1076)}, description=Tagless in Kotlin with Arrow and manual DI, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/9267f5c98c92eafe5b2abbf1d22027d8, id=9267f5c98c92eafe5b2abbf1d22027d8, files={gistfile1.txt=GistFile(fileName=null, type=text/plain, language=Text, size=493)}, description=Scala Exercises - LambdaWorld Scala Center Hackathon, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/4c52171c35929a1aa0f3ac2762abce87, id=4c52171c35929a1aa0f3ac2762abce87, files={errors.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=3422)}, description=Sane Error Handling, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/6b825f53fc5c4370f488b200928cb461, id=6b825f53fc5c4370f488b200928cb461, files={increase_performance_attempt.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=277)}, description=Wrong order of effects, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/9cdebac37aaba038235bb5effe0cbd0e, id=9cdebac37aaba038235bb5effe0cbd0e, files={ecpitfalls.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=195)}, description=Wrong Execution Context passed to all ops in the same way via flatMap, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/13a8a8789f9b70a1535ea4d44dfb1777, id=13a8a8789f9b70a1535ea4d44dfb1777, files={FreeComposition.hs=GistFile(fileName=null, type=text/plain, language=Haskell, size=2902), FreeComposition.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=3104)}, description=Applications as Coproducts of Free ADTs. http://www.47deg.com/blog/fp-for-the-average-joe-part3-free-monads, comments=1, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/a38b99816020d2bce5fb, id=a38b99816020d2bce5fb, files={KleisliLocalShaped.sc=GistFile(fileName=null, type=application/vnd.ibm.secure-container, language=Scala, size=796)}, description=Shapeless autolifting Kleisli#local to avoid lambda boilerplate, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/c9e52f90a10688a4fcb3, id=c9e52f90a10688a4fcb3, files={SearchService.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=2028)}, description=An example of refactoring nested login in the Ensime Search Service with `XorT`, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/37a0b88b95113e71f491, id=37a0b88b95113e71f491, files={Either.java=GistFile(fileName=null, type=text/plain, language=Java, size=3578)}, description=A right biased disjoint union in Java with useful functional combinators., comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/6271058, id=6271058, files={Global.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=641), application.conf=GistFile(fileName=null, type=text/plain, language=null, size=175)}, description=Load application.conf overrides based on runtime environment and merge in overridden props. e.g. application.dev.conf, application.prod.conf, application.test.conf, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/4971984, id=4971984, files={ScalaVsJava.md=GistFile(fileName=null, type=text/plain, language=Markdown, size=1105)}, description=Some sample code regarding Scala Vs Java code verbosity, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/4543801, id=4543801, files={EmailService.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=6083)}, description=EmailService.scala improved with Exception Handling and Routes, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/4521203, id=4521203, files={EmailService.scala=GistFile(fileName=null, type=text/plain, language=Scala, size=982)}, description=scala EmailService Actor, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/3931432, id=3931432, files={PersistenceServiceProxy.java=GistFile(fileName=null, type=text/plain, language=Java, size=1490)}, description=Sample Java Proxy, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/3930928, id=3930928, files={Application.java=GistFile(fileName=null, type=text/plain, language=Java, size=457)}, description=Sample Java Façade, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/3930813, id=3930813, files={Application.java=GistFile(fileName=null, type=text/plain, language=Java, size=939)}, description=Sample Java Abstract Factory, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/3928549, id=3928549, files={EarthService.java=GistFile(fileName=null, type=text/plain, language=Java, size=221)}, description=Sample Java Singleton, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/1217755, id=1217755, files={NetUtils.java=GistFile(fileName=null, type=text/plain, language=Java, size=1457)}, description=Check if a user has an internet connection for Android, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/1176022, id=1176022, files={gistfile1.m=GistFile(fileName=null, type=text/plain, language=Objective-C, size=2741)}, description=Async Operations with ObjectiveC Blocks, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja)), Gist(url=https://api.github.com/gists/1159583, id=1159583, files={ContextUtils.java=GistFile(fileName=null, type=text/plain, language=Java, size=2150), EventListener.java=GistFile(fileName=null, type=text/plain, language=Java, size=978), EventPublisher.java=GistFile(fileName=null, type=text/plain, language=Java, size=965), EventService.java=GistFile(fileName=null, type=text/plain, language=Java, size=1235), EventServiceImpl.java=GistFile(fileName=null, type=text/plain, language=Java, size=5977), EventSubscriber.java=GistFile(fileName=null, type=text/plain, language=Java, size=1235), SampleAnnotations.java=GistFile(fileName=null, type=text/plain, language=Java, size=803), SampleAnnotationsImpl.java=GistFile(fileName=null, type=text/plain, language=Java, size=1834), SampleProgrammatically.java=GistFile(fileName=null, type=text/plain, language=Java, size=808), SampleProgrammaticallyImpl.java=GistFile(fileName=null, type=text/plain, language=Java, size=1507)}, description=Simple Event Broadcast with JAVA / Spring AOP / Annotations, comments=0, owner=GithubUser(login=raulraja, id=456796, url=https://api.github.com/users/raulraja))])
 ```
 
 ---
 
 ## Support Async/Non-Blocking Popular data types
 
-Folks starting with FP in Kotlin lean toward using `Result` and `Either` types.
-This is exception free but it remains blocking
+When you are learning FP one leans toward using exception-free but blocking `Try` and `Either` like types.
 
-```kotlin
+```kotlin:ank
 import arrow.core.*
 
 fun publicGistsForUser(userName: String): Either<Throwable, ListK<Gist>> {
-  val (_,_, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString()
+  val (_,_, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString() // blocking IO
   return when (result) {
-    is Result.Failure -> result.getException().left()
+    is Result.Failure -> result.getException().left() //exceptions as a value
     is Result.Success -> fromJson(result.value).right()
   }
 }
 
 publicGistsForUser("-__unkown_user__-")
-// Left(a=com.github.kittinunf.fuel.core.HttpException: HTTP Exception 404 Not Found)
 ```
 
 ---
 
 ## Support Async/Non-Blocking Popular data types
 
-Kotlin Coroutines is a popular async framework
+Many choose to go non-blocking with Kotlin Coroutines, a great and popular kotlin async framework
 
-```kotlin
+```kotlin:fail
 import kotlinx.coroutines.experimental.*
 
 fun publicGistsForUser(userName: String): Deferred<Either<Throwable, ListK<Gist>>> =
   async {
-    val (_, _, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString()
+    val (_, _, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString() 
     when (result) {
       is Result.Failure -> result.getException().left()
       is Result.Success -> fromJson(result.value).right()
@@ -282,26 +318,117 @@ fun publicGistsForUser(userName: String): Deferred<Either<Throwable, ListK<Gist>
   }
 
 publicGistsForUser("raulraja")
-// DeferredCoroutine{Active}@489b9d56
 ```
 
 ---
 
-## A few syntax examples
+## Support Async/Non-Blocking Popular data types
+
+But now we have to dive deep into the `Deferred` and `Either` effects to get to the value we care about
 
 ```kotlin
+import arrow.effects.*
+import arrow.instances.*
+import arrow.typeclasses.*
+import arrow.effects.typeclasses.*
 
+DeferredK.monad().binding {
+  val raulResult: Either<Throwable, ListK<Gist>> = publicGistsForUser("raulraja").k().bind() 
+  val rafaResult: Either<Throwable, ListK<Gist>> = publicGistsForUser("rafaparedela").k().bind()
+  Either.monad<Throwable>().binding {
+    val raulGists: ListK<Gist> = raulResult.bind()
+    val rafaGists: ListK<Gist> = rafaResult.bind()
+    raulGists + rafaGists
+  }
+}
 ```
 
 ---
 
-## Applicative Builder
+## Support Async/Non-Blocking Popular data types
+
+Arrow Monad Transformers allow you to remain in the world of concrete data types such as `Either` and `Deferred`
 
 ```kotlin
+import arrow.effects.*
 
+EitherT
+  .monad<ForDeferredK, Throwable>(DeferredK.monad())
+  .binding {
+     val raulGists = EitherT(publicGistsForUser("raulraja").k()).bind()
+     val rafaGists = EitherT(publicGistsForUser("rafaparedela").k()).bind()
+     raulGists + rafaGists
+   }
 ```
 
 ---
+
+## Support Async/Non-Blocking Popular data types
+
+But none of this stuff actually requires concrete data types if we use a Tagless Final Encoding.
+`Kind<F, A>` is the same as an `A` value inside `F` where `F` is a container.
+Ex: `List<A>`, `Deferred<A>`, `IO<A>`, `Observable<A>`
+
+```kotlin
+import arrow.Kind
+
+interface GistApiDataSource<F> {
+  fun publicGistsForUser(userName: String): Kind<F, ListK<Gist>>
+}
+```
+
+---
+
+## Support Async/Non-Blocking Popular data types
+
+How can we implement a computation in the context of `F` if we don't know what `F` is?
+
+```kotlin
+class DefaultGistApiDataSource<F>() : GistApiDataSource<F> {
+  override fun publicGistsForUser(userName: String): Kind<F, ListK<Gist>> = TODO()
+}
+```
+
+---
+
+## Support Async/Non-Blocking Popular data types
+
+Ad-Hoc Polymorphism and type classes!
+A type class is a generic interface that describes behaviors that concrete types can support
+
+```kotlin
+interface Functor<F> {
+  fun <A, B> Kind<F, A>.map(f: (A) -> B): Kind<F, B>
+}
+```
+
+---
+
+## Support Async/Non-Blocking Popular data types
+
+Monad models transformations which depend on values to be completed.
+
+```kotlin
+interface Monad<F> : Applicative<F> {
+  fun <A, B> Kind<F, A>.flatMap(f: (A) -> Kind<F, B>): Kind<F, B>
+}
+```
+
+```kotlin
+listOf(1).map { it + 1 }
+```
+```kotlin
+Option(1).map { it + 1 }
+```
+```kotlin
+Try { 1 }.map { it + 1 }
+```
+```kotlin
+Either.Right(1).map { it + 1 }
+```
+
+---
+
 
 ## Applicative Builder
 
@@ -322,7 +449,6 @@ publicGistsForUser("raulraja")
 Generalized to all monads. A suspended function provides a non blocking `F<A> -> A`
 
 ```kotlin
-
 ```
 
 ---
@@ -332,7 +458,6 @@ Generalized to all monads. A suspended function provides a non blocking `F<A> ->
 Automatically captures exceptions for instances of `MonadError<F, Throwable>`
 
 ```kotlin
-
 ```
 
 ---
@@ -342,7 +467,6 @@ Automatically captures exceptions for instances of `MonadError<F, Throwable>`
 Imperative filtering control for data types that can provide `empty` values.
 
 ```kotlin
-
 ```
 
 ---
@@ -388,7 +512,6 @@ Arrow provides `MonadError<F, Throwable>` for `Deferred`
 Λrrow includes an `optics` library that make working with immutable data a breeze
 
 ```kotlin
-
 ```
 
 ---
@@ -398,7 +521,6 @@ Arrow provides `MonadError<F, Throwable>` for `Deferred`
 while `kotlin` provides a synthetic `copy` dealing with nested data can be tedious
 
 ```kotlin
-
 ```
 
 ---
@@ -417,7 +539,6 @@ You may define composable `Lenses` to work with immutable data transformations
 You may define composable `Lenses` to work with immutable data transformations
 
 ```kotlin
-
 ```
 
 ---
@@ -436,7 +557,6 @@ Or just let Λrrow `@optics` do the dirty work
 Optics comes with a succinct and powerful DSL to manipulate deeply nested immutable properties
 
 ```kotlin
-
 ```
 
 ---
@@ -455,7 +575,6 @@ You can also define `@optics` for your sealed hierarchies
 Where you operate over sealed hierarchies manually...
 
 ```kotlin
-
 ```
 
 ---
@@ -465,7 +584,6 @@ Where you operate over sealed hierarchies manually...
 ...you cruise now through properties with the new optics DSL
 
 ```kotlin
-
 ```
 
 ---
@@ -543,7 +661,6 @@ import arrow.typeclasses.*
 With emulated Higher Kinds and Type classes we can now write polymorphic code
 
 ```kotlin
-
 ```
 
 ---
@@ -580,7 +697,6 @@ With emulated Higher Kinds and Type classes we can now write polymorphic code
 Program that are abstract and work in many runtimes!
 
 ```kotlin
-
 ```
 
 ---
@@ -590,7 +706,6 @@ Program that are abstract and work in many runtimes!
 Program that are abstract and work in many runtimes!
 
 ```kotlin
-
 ```
 
 ---
@@ -600,7 +715,6 @@ Program that are abstract and work in many runtimes!
 Program that are abstract and work in many runtimes!
 
 ```kotlin
-
 ```
 
 ---

@@ -32,13 +32,4 @@ class DefaultGistApiDataSource<F>(
           }
         }.bind()
       }
-
-  fun publicGistsForUsers(userName: String): ListK<Gist> {
-    val (_,_, result) = "https://api.github.com/users/$userName/gists".httpGet().responseString()
-      return    when (result) {
-        is Result.Failure -> throw result.getException()
-        is Result.Success -> fromJson(result.value)
-      }
-  }
-
 }
