@@ -10,18 +10,15 @@ footer:/           [@raulraja](https://twitter.com/raulraja) -> [@47deg](https:/
 
 # Who am I? # 
 
-![](custom/images/cover-background.png)
-
 [@raulraja](https://twitter.com/raulraja)
 [@47deg](https://twitter.com/47deg)
 
 - Co-Founder and CTO at 47 Degrees
-- FP advocate
-- Electric Guitar @ <Ben Montoya & the Free Monads>
+- Typed FP advocate (regardless of language)
 
 ---
 
-## Started as learning Exercise to learn FP over Slack
+## Started as learning Exercise to learn FP in the spanish Android Community Slack
 
 ![inline](custom/images/ojetehandler.png)
 
@@ -29,7 +26,7 @@ footer:/           [@raulraja](https://twitter.com/raulraja) -> [@47deg](https:/
 
 ## ...then KΛTEGORY was born: Solution for Typed FP in Kotlin
 
-![inline](custom/images/kategory-logo.svg)
+![inline](custom/images/kategory.png)
 
 ---
 
@@ -97,7 +94,7 @@ fun publicGistsForUser(userName: String): List<Gist> = TODO()
 
 ---
 
-## __Immutable__ model
+## Immutable model
 
 - Allow easy in memory updates
 - Support deeply nested relationships without boilerplate
@@ -121,7 +118,7 @@ data class GistFile(val fileName: String?)
 
 ---
 
-## __Immutable__ model
+## Immutable model
 
 - Allow easy in memory updates
 - Support deeply nested relationships without boilerplate
@@ -138,13 +135,13 @@ val gist =
     ),
     description = "Tagless with Λrrow & typeclassless using extension functions and instances",
     comments = 0,
-    owner = GithubUser(login = "raulraja")
+    owner = GithubUser(login = "-__unkown_user1__-")
   )
 ```
 
 ---
 
-## __Immutable__ model
+## Immutable model
 
 The `data class` synthetic `copy` is fine for simple cases
 
@@ -154,7 +151,7 @@ gist.copy(description = gist.description?.toUpperCase())
 
 ---
 
-## __Immutable__ model
+## Immutable model
 
 As we dive deeper to update nested data the levels of nested `copy` increases
 
@@ -168,7 +165,7 @@ gist.copy(
 
 ---
 
-## __Immutable__ model
+## Immutable model
 
 In Typed FP immutable updates is frequently done with composable `Optics` like `Lens`
 
@@ -194,7 +191,7 @@ ownerLogin.modify(gist, String::toUpperCase)
 
 ---
 
-## __Immutable__ model
+## Immutable model
 
 Updating arbitrarily nested data with Λrrow is a piece of cake
 
@@ -469,6 +466,7 @@ class DefaultGistApiDataSource<F> : GistApiDataSource<F> {
 ## Support Async/Non-Blocking Popular data types
 
 Ad-Hoc Polymorphism and type classes!
+
 A type class is a generic interface that describes behaviors that concrete types can support
 
 ```kotlin
@@ -484,7 +482,7 @@ interface Functor<F> {
 
 ## Support Async/Non-Blocking Popular data types
 
-For example `Functor` allows us to transform the contents regardless of the concrete data type.
+Ex. `Functor` allows us to transform the contents regardless of the concrete data type.
 
 ```kotlin:ank
 listOf(1).map { it + 1 }
@@ -562,10 +560,16 @@ abstract class Module<F>(
 Our library now supports all data types that provide a type class instance for `Async`.
 This pattern allow you to keep code in a single place while providing
 
-```
+```groovy
 compile "com.biz:mylib-coroutines:$version"
+```
+```kotlin
 object KotlinCoroutinesRuntime : Module<ForDeferredK>(DeferredK.async())
 ```
+```kotlin:ank
+import arrow.intro.runtime.*
+KotlinCoroutinesRuntime.api.publicGistsForUser("-__unkown_user1__-")
+```
 
 ---
 
@@ -574,10 +578,16 @@ object KotlinCoroutinesRuntime : Module<ForDeferredK>(DeferredK.async())
 Our library now supports all data types that provide a type class instance for `Async`.
 This pattern allow you to keep code in a single place while providing
 
-```
+```groovy
 compile "com.biz:mylib-reactor:$version"
+```
+```kotlin
 object ReactorRuntime : Module<ForFluxK>(FluxK.async())
 ```
+```kotlin:ank
+import arrow.intro.runtime.*
+ReactorRuntime.api.publicGistsForUser("-__unkown_user1__-")
+```
 
 ---
 
@@ -586,10 +596,16 @@ object ReactorRuntime : Module<ForFluxK>(FluxK.async())
 Our library now supports all data types that provide a type class instance for `Async`.
 This pattern allow you to keep code in a single place while providing
 
-```
+```groovy
 compile "com.biz:mylib-arrow-io:$version"
+```
+```kotlin
 object IORuntime : Module<ForIO>(IO.async())
 ```
+```kotlin:ank
+import arrow.intro.runtime.*
+IORuntime.api.publicGistsForUser("-__unkown_user1__-")
+```
 
 ---
 
@@ -598,9 +614,15 @@ object IORuntime : Module<ForIO>(IO.async())
 Our library now supports all data types that provide a type class instance for `Async`.
 This pattern allow you to keep code in a single place while providing
 
-```
+```groovy
 compile "com.biz:mylib-rx2:$version"
+```
+```kotlin
 object Rx2Runtime : Module<ForObservableK>(ObservableK.async())
+```
+```kotlin:ank
+import arrow.intro.runtime.Rx2Runtime
+Rx2Runtime.api.publicGistsForUser("-__unkown_user1__-")
 ```
 
 ---
