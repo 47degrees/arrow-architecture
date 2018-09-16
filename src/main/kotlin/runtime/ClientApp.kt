@@ -1,17 +1,12 @@
 package arrow.intro.runtime
 
 import arrow.Kind
-import arrow.data.*
+import arrow.data.ListK
+import arrow.data.k
 import arrow.effects.typeclasses.MonadDefer
 import arrow.intro.Gist
-import arrow.intro.GistFile
 import arrow.intro.algebras.GistsApi
-import arrow.intro.files
-import arrow.intro.type
-import arrow.optics.dsl.at
-import arrow.optics.dsl.every
 import arrow.typeclasses.binding
-import model.instances.show
 
 class ClientApp<F>(
   private val module: Module<F>,
@@ -31,7 +26,7 @@ class ClientApp<F>(
   fun main(): Kind<F, Unit> =
     binding {
       gistsTeletype().bind().k().traverse(this) { gist ->
-        delay { println(Gist.show().run { gist.show() }) }
+        delay { println(gist) }
       }.followedBy(main()).followedBy(just(Unit)).bind()
     }
 

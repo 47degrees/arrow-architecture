@@ -14,12 +14,18 @@ data class Gist(
   override fun toString(): String =
     "Gist($description, ${owner.login}, file count: ${files.size})"
 
+  companion object
+
 }
 
 @optics
 @JsonClass(generateAdapter = true)
-data class GithubUser(val login: String)
+data class GithubUser(val login: String) {
+  companion object
+}
 
 @optics
 @JsonClass(generateAdapter = true)
-data class GistFile(val fileName: String?)
+data class GistFile(val fileName: String?) {
+  companion object
+}
