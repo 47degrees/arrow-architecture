@@ -346,7 +346,7 @@ fun publicGistsForUser(userName: String): Deferred<Either<Throwable, ListK<Gist>
   
 //by default `async` when constructed runs and does not suspend effects  
 publicGistsForUser("-__unkown_user1__-") 
-// DeferredCoroutine{Active}@ffd42a
+// DeferredCoroutine{Active}@514149e1
 ```
 
 ---
@@ -407,7 +407,7 @@ fun allGists(): DeferredK<Either<Throwable, List<Gist>>> =
 
 // Λrrow's delegation to `async` is always lazy
 allGists()
-// DeferredK(deferred=LazyDeferredCoroutine{New}@74acc03d)
+// DeferredK(deferred=LazyDeferredCoroutine{New}@5113d1f2)
 ```
 
 ---
@@ -579,7 +579,7 @@ object KotlinCoroutinesRuntime : Module<ForDeferredK>(DeferredK.async())
 ```kotlin
 import arrow.intro.runtime.*
 KotlinCoroutinesRuntime.api.publicGistsForUser("-__unkown_user1__-")
-// DeferredK(deferred=LazyDeferredCoroutine{New}@5e382e81)
+// DeferredK(deferred=LazyDeferredCoroutine{New}@2e2d965)
 ```
 
 ---
@@ -636,7 +636,7 @@ object Rx2Runtime : Module<ForObservableK>(ObservableK.async())
 ```kotlin
 import arrow.intro.runtime.Rx2Runtime
 Rx2Runtime.api.publicGistsForUser("-__unkown_user1__-")
-// ObservableK(observable=io.reactivex.internal.operators.observable.ObservableFlatMap@3b52c77e)
+// ObservableK(observable=io.reactivex.internal.operators.observable.ObservableFlatMap@fb152c5)
 ```
 
 ---
