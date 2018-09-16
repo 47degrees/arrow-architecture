@@ -1,10 +1,10 @@
 autoscale: true
 slidenumbers: true
-footer: [(@raulraja](https://twitter.com/raulraja) [, @47deg)](https://twitter.com/47deg) [=> Sources,](https://github.com/47deg/types-vs-tests) [Slides](https://speakerdeck.com/raulraja/types-vs-tests)
+footer:/           [@raulraja](https://twitter.com/raulraja) -> [@47deg](https://twitter.com/47deg) -> [Sources](https://github.com/47deg/arrow-architecture) -> [Slides](https://speakerdeck.com/raulraja/arrow-architecture)
+
+# Building Apps & Libraries with Λrrow
 
 ![inline](custom/images/arrow-brand-transparent.png)
-
-# Building Apps and Libs with Λrrow
 
 ---
 
@@ -136,7 +136,7 @@ val gist =
         fileName = "typeclassless_tagless_extensions.kt"
       )
     ),
-    description = "Tagless with Arrow & typeclassless using extension functions and instances",
+    description = "Tagless with Λrrow & typeclassless using extension functions and instances",
     comments = 0,
     owner = GithubUser(login = "raulraja")
   )
@@ -150,7 +150,7 @@ The `data class` synthetic `copy` is fine for simple cases
 
 ```kotlin
 gist.copy(description = gist.description?.toUpperCase())
-// Gist(TAGLESS WITH ARROW & TYPECLASSLESS USING EXTENSION FUNCTIONS AND INSTANCES, raulraja, file count: 1)
+// Gist(TAGLESS WITH ΛRROW & TYPECLASSLESS USING EXTENSION FUNCTIONS AND INSTANCES, raulraja, file count: 1)
 ```
 
 ---
@@ -165,7 +165,7 @@ gist.copy(
     login = gist.owner.login.toUpperCase()
   )
 )
-// Gist(Tagless with Arrow & typeclassless using extension functions and instances, RAULRAJA, file count: 1)
+// Gist(Tagless with Λrrow & typeclassless using extension functions and instances, RAULRAJA, file count: 1)
 ```
 
 ---
@@ -192,7 +192,7 @@ val loginLens: Lens<GithubUser, String> =
 val ownerLogin = ownerLens compose loginLens
 
 ownerLogin.modify(gist, String::toUpperCase)
-// Gist(Tagless with Arrow & typeclassless using extension functions and instances, RAULRAJA, file count: 1)
+// Gist(Tagless with Λrrow & typeclassless using extension functions and instances, RAULRAJA, file count: 1)
 ```
 
 ---
@@ -391,7 +391,7 @@ suspend fun allGists(): List<Gist> {
 
 ## Support Async/Non-Blocking Popular data types
 
-Arrow Monad Transformers allow you to remain in the world of concrete data types such as `Either` and `Deferred`
+Λrrow Monad Transformers allow you to remain in the world of concrete data types such as `Either` and `Deferred`
 
 ```kotlin
 import arrow.effects.*
@@ -445,7 +445,7 @@ Turns out we don't need concrete data types if we use Type classes and Polymorph
 
 ## Support Async/Non-Blocking Popular data types
 
-Arrow can abstract away the computational container type emulating __higher kinded types__.
+Λrrow can abstract away the computational container type emulating __higher kinded types__.
 
 `Kind<F, A>` denotes an `A` value inside an `F` type contructor:
 Ex: `List<A>`, `Deferred<A>`, `IO<A>`, `Observable<A>`
@@ -479,7 +479,7 @@ A type class is a generic interface that describes behaviors that concrete types
 
 ```kotlin
 interface Functor<F> {
-  // Arrow projects type class behaviors as static or extension functions over kinded values
+  // Λrrow projects type class behaviors as static or extension functions over kinded values
   fun <A, B> Kind<F, A>.map(f: (A) -> B): Kind<F, B>
   fun <A, B> lift(f: (A) -> B): (Kind<F, A>) -> Kind<F, B> =
       { fa: Kind<F, A> -> fa.map(f) }
@@ -513,7 +513,7 @@ Either.Right(1).map { it + 1 }
 
 ## Support Async/Non-Blocking Popular data types
 
-### Arrow includes a comprehensive list of type classes
+### Λrrow includes a comprehensive list of type classes
 
 | Type class | Combinator |
 | --- | --- |
