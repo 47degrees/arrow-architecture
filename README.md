@@ -1,12 +1,12 @@
-# Λrrow https://arrow-kt.io
+# Architecting Typed FP Applications & Libraries in Kotlin with Λrrow
 
-This presentation shows how to build polymorphic apps and libraries in Λrrow 0.8.0
+This talk includes a comprehensive walkthrough of the most important patterns covered by the data types and type classes we find in Λrrow. Each pattern will be accompanied by code examples that illustrate how Λrrow brings Typed Functional Programming to the Kotlin Programming Language.
 
-Λrrow is a library for Typed Functional Programming in Kotlin. 
+We will learn the fundamentals of Typed Functional Programming applied to Kotlin with the library Arrow and how we can architect applications and libraries that are polymorphic and composed of pure abstract functions using type classes.
 
-It includes the most popular data types, type classes and abstractions such as Option, Try, Either, IO, Functor, Applicative, Monad and many more empowering users to define pure FP apps and libraries built atop higher order abstractions. Use the below list to learn more about Λrrow’s main features.
+Arrow provides a unified programming model in by which Kotlin practitioners can build programs relying on the traditional FP, MTL and Effect type classes in a Tagless Final style offering levels of flexibility and techniques new to the Kotlin FP community.
 
-- [PDF and slides on speakerdeck](https://speakerdeck.com/raulraja/arrow-architecture)
+- [PDF and slides on speakerdeck](https://speakerdeck.com/raulraja/architecting-typed-fp-applications-and-libraries-in-kotlin-with-lrrow)
 - [Deck Markdown sources](src/main/ank/README.md)
 - Includes Demo Applications and Sources for Reactor, IO, Coroutines and Rx2
 
