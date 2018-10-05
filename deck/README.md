@@ -1,6 +1,6 @@
 autoscale: true
 slidenumbers: true
-footer:/           [@raulraja](https://twitter.com/raulraja) -> [@47deg](https://twitter.com/47deg) -> [Sources](https://github.com/47deg/arrow-architecture) -> [Slides](https://speakerdeck.com/raulraja/arrow-architecture)
+footer:/           [@raulraja](https://twitter.com/raulraja) -> [@47deg](https://twitter.com/47deg) -> [Sources](https://github.com/47deg/arrow-architecture) -> [Slides](https://speakerdeck.com/raulraja/architecting-typed-fp-applications-and-libraries-in-kotlin-with-lrrow)
 
 # Building Apps & Libraries with Λrrow
 
@@ -813,7 +813,7 @@ Type class declarations are simple plain interfaces and have a expanded usage be
 ```kotlin
 interface Repository<A> {
   fun A.save(): A
-  fun findAll(): List<A>
+  fun cache(): List<A>
 }
 ```
 

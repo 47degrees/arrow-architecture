@@ -799,7 +799,7 @@ Type class declarations are simple plain interfaces and have a expanded usage be
 ```kotlin
 interface Repository<A> {
   fun A.save(): A
-  fun findAll(): List<A>
+  fun cache(): List<A>
 }
 ```
 
